@@ -12,18 +12,10 @@ clean-targets: ["target", "dbt_packages"]
 seeds:
   +quote_columns: false
   +full_refresh: true
-  # Centralized seed runtime options for all packages
-  # CSV parsing defaults (adapter-agnostic)
   
-  # Package-specific seed configurations
+  # amos_source_example seeds - all load to RAW database
   amos_source_example:
-    # All source example seeds load to RAW database
     +database: "{{ env_var('DBT_RAW_DATABASE', 'RAW') }}"
-
-# Seed configurations
-seeds:
-  amos_source_example:
-    +quote_columns: false
     
     # CRM vendor seeds
     crm_vendor:
@@ -49,6 +41,12 @@ seeds:
     reference:
       +schema: AMOS_REFERENCE
       +tags: ["reference", "seed", "raw"]
+  
+  # amos_core seeds - canonical reference data
+  amos_core:
+    +database: "{{ env_var('DBT_CANONICAL_DATABASE', 'CANONICAL') }}"
+    +schema: REFERENCE
+    +tags: ["reference", "seed", "canonical"]
 
 # No adapter-specific hooks; compatibility handled via macros in packages
 
