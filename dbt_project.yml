@@ -1,0 +1,56 @@
+name: "amos_runner"
+version: "0.0.1"
+config-version: 2
+
+profile: "{{ env_var('DBT_PROFILE', 'amos_snowflake') }}"
+
+# nothing to build in this repo; we build the imported packages
+model-paths: ["models"]     # keep default
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+seeds:
+  +quote_columns: false
+  +full_refresh: true
+  # Centralized seed runtime options for all packages
+  # CSV parsing defaults (adapter-agnostic)
+  
+  # Package-specific seed configurations
+  amos_source_example:
+    # All source example seeds load to RAW database
+    +database: "{{ env_var('DBT_RAW_DATABASE', 'RAW') }}"
+
+# Seed configurations
+seeds:
+  amos_source_example:
+    +quote_columns: false
+    
+    # CRM vendor seeds
+    crm_vendor:
+      +schema: AMOS_CRM_VENDOR
+      +tags: ["crm", "seed", "raw"]
+    
+    # Fund admin vendor seeds
+    fund_admin_vendor:
+      +schema: AMOS_FUND_ADMIN_VENDOR
+      +tags: ["fund_admin", "seed", "raw"]
+    
+    # Portfolio management vendor seeds
+    portfolio_management_vendor:
+      +schema: AMOS_PM_VENDOR
+      +tags: ["portfolio_mgmt", "seed", "raw"]
+    
+    # Accounting vendor seeds
+    accounting_vendor:
+      +schema: AMOS_ACCOUNTING_VENDOR
+      +tags: ["accounting", "seed", "raw"]
+    
+    # Reference data seeds
+    reference:
+      +schema: AMOS_REFERENCE
+      +tags: ["reference", "seed", "raw"]
+
+# No adapter-specific hooks; compatibility handled via macros in packages
+
+vars:
+  active_source: "example"   # toggle to another connector later
