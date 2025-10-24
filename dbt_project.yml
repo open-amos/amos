@@ -13,40 +13,25 @@ seeds:
   +quote_columns: false
   +full_refresh: true
   
-  # amos_source_example seeds - all load to RAW database
-  amos_source_example:
-    +database: "{{ env_var('DBT_RAW_DATABASE', 'RAW') }}"
-    
-    # CRM vendor seeds
-    crm_vendor:
-      +schema: AMOS_CRM_VENDOR
-      +tags: ["crm", "seed", "raw"]
-    
-    # Fund admin vendor seeds
-    fund_admin_vendor:
-      +schema: AMOS_FUND_ADMIN_VENDOR
-      +tags: ["fund_admin", "seed", "raw"]
-    
-    # Portfolio management vendor seeds
-    portfolio_management_vendor:
-      +schema: AMOS_PM_VENDOR
-      +tags: ["portfolio_mgmt", "seed", "raw"]
-    
-    # Accounting vendor seeds
-    accounting_vendor:
-      +schema: AMOS_ACCOUNTING_VENDOR
-      +tags: ["accounting", "seed", "raw"]
-    
-    # Reference data seeds
-    reference:
-      +schema: AMOS_REFERENCE
-      +tags: ["reference", "seed", "raw"]
+  # Seed configurations are defined in each package's dbt_project.yml with sensible defaults.
+  # Override them here if you need custom database/schema names for your environment.
   
-  # amos_core seeds - canonical reference data
-  amos_core:
-    +database: "{{ env_var('DBT_CANONICAL_DATABASE', 'CANONICAL') }}"
-    +schema: REFERENCE
-    +tags: ["reference", "seed", "canonical"]
+  # Example: Override amos_source_example seed schemas
+  # amos_source_example:
+  #   crm_example:
+  #     +schema: AMOS_CRM_EXAMPLE
+  #   fund_admin_example:
+  #     +schema: AMOS_FUND_ADMIN_EXAMPLE
+  #   portfolio_management_example:
+  #     +schema: AMOS_PM_EXAMPLE
+  #   accounting_example:
+  #     +schema: AMOS_ACCOUNTING_EXAMPLE
+  #   shared_data_example:
+  #     +schema: AMOS_SHARED_DATA_EXAMPLE
+  
+  # Example: Override amos_core seed schema
+  # amos_core:
+  #   +schema: REFERENCE
 
 # No adapter-specific hooks; compatibility handled via macros in packages
 
