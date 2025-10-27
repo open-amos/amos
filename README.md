@@ -105,5 +105,5 @@ AMOS is open source and welcomes contributions. Report bugs, suggest features, a
 
 ## Related Projects
 
-- **[AMOS Core](../core)** - Canonical dimensional model
-- **[AMOS Source Example](../source-example)** - Source integration patterns
+- **[AMOS Core](https://github.com/open-amos/core)** - Canonical dimensional model
+- **[AMOS Source Example](https://github.com/open-amos/source-example)** - Source integration patterns
