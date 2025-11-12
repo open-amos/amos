@@ -9,7 +9,7 @@
 
 # AMOS Starter
 
-AMOS Starter is a thin dbt project that orchestrates AMOS Core and AMOS Source Example to deliver an end-to-end pipeline—from source systems to analytics-ready data.
+AMOS Starter is a thin dbt project that wires AMOS Core and AMOS Source Example together to deliver an end-to-end pipeline—from source systems to analytics-ready data.
 
 ## Quick Start
 
