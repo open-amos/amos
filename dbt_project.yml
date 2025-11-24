@@ -37,3 +37,6 @@ seeds:
 
 vars:
   active_source: "example"   # toggle to another connector later
+
+on-run-end:
+  - "{{ dbt_artifacts.upload_results(results) }}"
