@@ -12,32 +12,49 @@ The Open-Source Data Backbone for Private Market Funds
 
 ## What is AMOS?
 
-AMOS —the Asset Management Operating System— is a modern, open-source data stack purpose-built for private markets. It provides both emerging and established funds with the core infrastructure to turn fragmented operational data into a consistent, intelligent foundation for analysis and automation.
+AMOS (Asset Management Operating System) is a modern, open-source data stack purpose-built for private markets.
 
-AMOS is **open-source**, **cloud- and database-agnostic**, and **vendor-independent**, giving funds full control of their architecture while enabling shared data standards across the industry. 
+**It replaces fragile Excel macros and rigid SaaS exports with a programmable SQL foundation.**
+
+AMOS is **cloud-agnostic** and **vendor-independent**, giving funds full control of their architecture while enabling shared data standards across the industry.
 
 ## Who It’s For
 
-- **Emerging funds** looking for a lightweight but robust data foundation to support efficient operations, reliable reporting, and AI-readiness from day one  
-- **Established funds** seeking to modernize legacy systems and simplify complex data architectures without vendor lock-in
+  - **Emerging funds** looking for a lightweight but robust data foundation to support efficient operations and AI-readiness from day one.
+  - **Established funds** seeking to modernize legacy systems and simplify complex data architectures without vendor lock-in.
 
 ## Quick Start
 
-1. Install [dbt](https://docs.getdbt.com/docs/get-started-dbt) 
-2. Configure your database connections in your dbt `profiles.yml` file
-3. Git clone this repository
-4. Run `dbt deps` to install the dependencies
-5. Run `dbt seed` to load the example data
-6. Run `dbt run` to build the models
-7. Run `dbt test` to run the tests
+The fastest way to spin up the full stack is via Docker.
+
+```bash
+# 1. Clone the repo
+git clone [https://github.com/open-amos/amos.git](https://github.com/open-amos/amos.git)
+cd amos
+
+# 2. Launch the stack
+docker-compose up -d
+
+# 3. Access the UI
+# Dashboard: http://localhost:3000
+# Database: localhost:5432
+```
+
+If you prefer to run this in your own environment without Docker:
+
+1.  Install [dbt-core and dbt-postgres](https://docs.getdbt.com/docs/get-started-dbt) or any other adapter. AMOS works with any database engine supported by dbt, including PostgreSQL, MySQL, Microsoft SQL Server, Snowflake, Google BigQuery, Amazon Redshift, Databricks, and more.
+2.  Configure your database connections in `profiles.yml`
+3.  Run `dbt deps` to install dependencies (amos-core and amos-source-example)
+4.  Run `dbt seed` to load example data
+5.  Run `dbt run` to build the warehouse
+6.  Run `dbt test` to validate metrics
 
 ## Project Components
 
-We split the project into modular components to ensure flexibility.
+This repository (`amos`) acts as the orchestrator. The logic is modularized across the following repos:
 
 | Repository | Purpose | Who is this for? |
 | :--- | :--- | :--- |
-| **AMOS** | **The Product.** Contains the installer, Docker setup, and documentation. | **Everyone starts here.** |
 | **[AMOS Core](https://github.com/open-amos/amos-core)** | **The Brain.** The dbt models and SQL logic that power the platform. | Data Engineers extending the logic. |
 | **[AMOS Dashboard](https://github.com/open-amos/amos-dashboard)** | **The UI.** A reference implementation of a BI dashboard for private markets. | Frontend devs & UI customizers. |
 | **[AMOS Source Example](https://github.com/open-amos/amos-source-example)** | **The Template.** Example data loaders and transformation patterns. | Engineers building new integrations. |
@@ -82,44 +99,33 @@ We split the project into modular components to ensure flexibility.
 
 ## Demo
 
-Explore a dashboard demo built with AMOS Core, AMOS Source Example and AMOS Dashboard.
-[→ demo.amos.tech](https://demo.amos.tech)
-
+Explore a live dashboard built on top of the AMOS architecture.
+[**→ View live demo**](https://demo.amos.tech)
 ![image](https://amos.tech/wp-content/uploads/2025/04/screely-1764599384361-2048x1175.png)
 
 ## Current Scope
 
-AMOS currently supports core private markets use cases and data sources:
+AMOS currently supports core private market workflows:
 
-- Canonical model and base metrics for **Private Equity** and **Private Credit** workflows  
-- Integration patterns for key systems: **deal pipeline**, **portfolio management**, **fund administration**, and **accounting**
-
-The existing components provide a functional foundation for consolidating and analyzing fund, portfolio, and deal data in a unified way.
+  - **Canonical Models:** Private Equity & Private Credit.
+  - **Integration Patterns:** Deal Pipeline, Portfolio Management, Fund Admin, and Accounting.
 
 ## Roadmap
 
-AMOS is evolving toward broader coverage across asset classes and workflows. Upcoming milestones include:
+AMOS is evolving toward broader coverage. Upcoming milestones:
 
-- Additional models and metrics for **ESG**, **impact measurement**, and for other asset types  
-- Extended data connectors and transformation patterns  
-- A public **REST API** for external programmatic access  
-- **MCP server integration** for AI assistants and notebooks  
-- Prebuilt **dashboards** and **utility apps** for reporting, reconciliation, and data management
+  - 🟢 **Impact & ESG:** Standardized models for impact measurement.
+  - 🔌 **Rest API:** Public API for programmatic access to metrics.
+  - 🤖 **MCP Server:** Native integration for AI assistants (Claude/ChatGPT) to query your data.
+  - 📊 **Utility Apps:** Tools for automated PDF data extraction.
 
-## Customization and Extensibility
+## Extensibility
 
-## Customize
+AMOS is built to be extended, not forked.
 
-AMOS is built to be extended. You can:
-
-- **Connect real data sources** - Replace AMOS Source Example with your own sources and map them to AMOS Core
-- **Extend AMOS Core** - Add custom dimensions, facts, or metrics (in separate packages) 
-
-To maintain upgrade compatibility, avoid editing the AMOS Core directly. Instead, you should develop your own packages upstream or downstream of AMOS Core, using the models in **AMOS Source Example** and **AMOS Core** as templates.
-
+  * **Connect real data:** Swap the `Source Example` for your own custom dbt models connecting to raw data.
+  * **Extend the logic:** Import `amos-core` as a package and build your own marts on top of it.
 
 ## Licensing
 
-AMOS is currently in public preview.
-Each subproject README describes its temporary licensing terms.
-Final open-source or source-available licenses will be published before the 1.0 release.
+AMOS is currently in **Public Beta**. Each subproject README describes temporary licensing terms. Final open-source or source-available licenses will be finalized before the 1.0 release.
