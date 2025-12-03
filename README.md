@@ -66,7 +66,7 @@ This repository (`amos`) acts as the orchestrator. The logic is modularized acro
       S5[Accounting Systems]
       S6[More Sources...]
       
-      ING[<b>Ingestion & Model Mapping</b><br/><i>AMOS Source Example</i>]
+      ING[<b>Ingestion & Model Mapping</b><br/><i>AMOS Source Example</i><br><i>AMOS Reconciliation</i>]
       CORE[<b>Canonical Models & Metrics</b><br/><i>AMOS Core</i>]
       
       DASH[<b>BI Dashboards</b><br/><br/><i>AMOS Dashboard</i>, Power BI, Tableau, Metabase...]
