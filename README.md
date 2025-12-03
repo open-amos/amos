@@ -4,19 +4,14 @@
 
 # AMOS
 
-The Open-Source Data Backbone for Private Market Funds
-
-![image](https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge) ![image](https://img.shields.io/badge/status-public--beta-yellow?style=for-the-badge) ![image](https://img.shields.io/badge/dbt-FF694B?style=for-the-badge&logo=dbt&logoColor=white)
-
-> AMOS is currently in public beta stage (v0.1.0). Core architecture, models, and patterns are functional but still evolving.  
+![image](https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge) ![image](https://img.shields.io/badge/status-public--beta-yellow?style=for-the-badge)
+![image](https://img.shields.io/badge/dbt-FF694B?style=for-the-badge&logo=dbt&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Svelte](https://img.shields.io/badge/svelte-%23f1413d.svg?style=for-the-badge&logo=svelte&logoColor=white)
 
 ## What is AMOS?
 
-AMOS (Asset Management Operating System) is a modern, open-source data stack purpose-built for private markets.
+**The open-source data infrastructure for private market funds.**
 
-**It replaces fragile Excel macros and rigid SaaS exports with a programmable SQL foundation.**
-
-AMOS is **cloud-agnostic** and **vendor-independent**, giving funds full control of their architecture while enabling shared data standards across the industry.
+AMOS replaces spreadsheet chaos with a modern data stack. It connects your existing systems into a unified SQL warehouse, giving you a reliable foundation to automate reporting and deploy AI without vendor lock-in.
 
 ## Who It’s For
 
