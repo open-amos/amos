@@ -51,7 +51,7 @@ This repository (`amos`) acts as the orchestrator. The logic is modularized acro
 | Repository | Purpose | Who is this for? |
 | :--- | :--- | :--- |
 | **[AMOS Core](https://github.com/open-amos/core)** | **The Brain.** The dbt models and SQL logic that power the platform. | Data Engineers extending the logic. |
-| **[AMOS Reconciliation](https://github.com/open-amos/reconciliation)** <br/>*(Coming Soon)* | **The Glue.** A UI for mapping entities (e.g., "Seq" = "Sequoia") and resolving data conflicts across systems. | Data Stewards & Ops Teams. |
+| **[AMOS Reconciliation](https://github.com/open-amos/reconciliation)** <br/>*(Coming Soon)* | **The Glue.** A UI for mapping entities (e.g., `crm.company_id` = `portfolio.company_id`) and resolving data conflicts across systems. | Data Stewards & Ops Teams. |
 | **[AMOS Dashboard](https://github.com/open-amos/dashboard)** | **The UI.** A reference implementation of a BI dashboard for private markets. | Frontend devs & UI customizers. |
 | **[AMOS Source Example](https://github.com/open-amos/source-example)** | **The Template.** Example data loaders and transformation patterns. | Engineers building new integrations. |
 
