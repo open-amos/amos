@@ -1,4 +1,4 @@
-**Amos** | [Core](https://github.com/open-amos/core) | [Dashboard](https://github.com/open-amos/dashboard-example) | [Source Example](https://github.com/open-amos/source-example)
+**AMOS** | [Core](https://github.com/open-amos/core) | [Dashboard](https://github.com/open-amos/dashboard-example) | [Source Example](https://github.com/open-amos/source-example)
 
 ---
 
@@ -6,6 +6,8 @@
 
 ![image](https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge) ![image](https://img.shields.io/badge/status-public--beta-yellow?style=for-the-badge)
 ![image](https://img.shields.io/badge/dbt-FF694B?style=for-the-badge&logo=dbt&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![Svelte](https://img.shields.io/badge/svelte-%23f1413d.svg?style=for-the-badge&logo=svelte&logoColor=white)
+
+---
 
 ## What is AMOS?
 
