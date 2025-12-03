@@ -1,10 +1,35 @@
-name: "amos_runner"
-version: "0.0.1"
+name: "amos"
+version: "0.1.0"
 config-version: 2
 
-profile: "{{ env_var('DBT_PROFILE', 'amos_snowflake') }}"
+profile: "{{ env_var('DBT_PROFILE', 'amos') }}"
 
-# nothing to build in this repo; we build the imported packages
+# Use environment variables to write to different databases, 
+# if your data platform support supports it (eg. Snowflake, BigQuery)
+# Otherwise (as with PostgreSQL), write to the current target database, defined in profiles.yml
+
+sources:
+  amos_source_example:
+    +database: "{{ env_var('DBT_RAW_DATABASE', target.database) }}"
+
+seeds:
+  amos_source_example:
+    +database: "{{ env_var('DBT_RAW_DATABASE', target.database) }}"
+  amos_core:
+    +database: "{{ env_var('DBT_CORE_DATABASE', target.database) }}"
+
+models:
+  amos_source_example:
+    staging:
+      +database: "{{ env_var('DBT_STAGING_DATABASE', target.database) }}"
+    
+    intermediate:
+      +database: "{{ env_var('DBT_INTERMEDIATE_DATABASE', target.database) }}"
+  amos_core:
+    marts:
+      +database: "{{ env_var('DBT_CORE_DATABASE', target.database) }}"
+      
+
 model-paths: ["models"]     # keep default
 target-path: "target"
 clean-targets: ["target", "dbt_packages"]
@@ -12,28 +37,6 @@ clean-targets: ["target", "dbt_packages"]
 seeds:
   +quote_columns: false
   +full_refresh: true
-  
-  # Seed configurations are defined in each package's dbt_project.yml with sensible defaults.
-  # Override them here if you need custom database/schema names for your environment.
-  
-  # Example: Override amos_source_example seed schemas
-  # amos_source_example:
-  #   crm_example:
-  #     +schema: AMOS_CRM_EXAMPLE
-  #   fund_admin_example:
-  #     +schema: AMOS_FUND_ADMIN_EXAMPLE
-  #   portfolio_management_example:
-  #     +schema: AMOS_PM_EXAMPLE
-  #   accounting_example:
-  #     +schema: AMOS_ACCOUNTING_EXAMPLE
-  #   shared_data_example:
-  #     +schema: AMOS_SHARED_DATA_EXAMPLE
-  
-  # Example: Override amos_core seed schema
-  # amos_core:
-  #   +schema: REFERENCE
-
-# No adapter-specific hooks; compatibility handled via macros in packages
 
 vars:
   active_source: "example"   # toggle to another connector later

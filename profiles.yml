@@ -1,0 +1,15 @@
+# ⚠️ IMPORTANT: The name below ('amos') must match the 'profile:' line in dbt_project.yml
+amos:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('DBT_HOST', 'postgres') }}"
+      user: "{{ env_var('DBT_USER', 'amos') }}"
+      password: "{{ env_var('DBT_PASS', 'password') }}"
+      dbname: "{{ env_var('DBT_DB', 'amos_db') }}"
+      schema: public
+      port: 5432
+      threads: 4
+      # Standard timeout settings
+      connect_timeout: 10

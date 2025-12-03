@@ -1,15 +1,12 @@
 packages:
-  - local: ../amos_source_example
-    name: amos_source_example
-  - local: ../amos_core
-    name: amos_core
-  - name: dbt_utils
-    package: dbt-labs/dbt_utils
-    version: 1.3.2
-  - name: codegen
-    package: dbt-labs/codegen
-    version: 0.13.1
-  - name: dbt_artifacts
-    package: brooklyn-data/dbt_artifacts
-    version: 2.9.3
-sha1_hash: d0727852441e50f978cdf694a8dd78d5f3750334
+- git: https://github.com/open-amos/core.git
+  revision: main
+- git: https://github.com/open-amos/source-example.git
+  revision: main
+- package: dbt-labs/dbt_utils
+  version: 1.3.2
+- package: dbt-labs/codegen
+  version: 0.13.1
+- package: brooklyn-data/dbt_artifacts
+  version: 2.9.3
+sha1_hash: f1d053f29b976d822e27ecd9a2b5541e87a41c54

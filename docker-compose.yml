@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # ------------------------------------------------------------------
+  # 1. INFRASTRUCTURE: The Database
+  # ------------------------------------------------------------------
+  postgres:
+    container_name: amos_database
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: amos
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: amos_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U amos -d amos_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - amos_network
+
+  # ------------------------------------------------------------------
+  # 2. LOGIC: The dbt Project (Runs transformations)
+  # ------------------------------------------------------------------
+  amos-core:
+    container_name: amos_core
+    image: ghcr.io/dbt-labs/dbt-postgres:1.7.0
+    # Mount the current directory (your repo) into the container
+    volumes:
+      - .:/usr/app
+    # Set the working directory to where we mounted the code
+    working_dir: /usr/app
+    environment:
+      DBT_PROFILE: amos
+      # Tell dbt to look for profiles.yml in the current folder
+      DBT_PROFILES_DIR: /usr/app
+      # Credentials to connect to the postgres container
+      DBT_HOST: postgres
+      DBT_USER: amos
+      DBT_PASS: password
+      DBT_DB: amos_db
+    # On startup: Install packages, load seed data, run models, then exit.
+    # Note: To keep the container alive for debugging, change command to "tail -f /dev/null"
+    # Override the image's default 'dbt' entrypoint
+    entrypoint: /bin/bash
+    # Pass the commands as arguments to bash
+    # 1. Install packages
+    # 2. Build ONLY the artifact tables (so the 'log book' exists)
+    # 3. Load the seeds (now they can log success)
+    # 4. Run the rest of the project (excluding artifacts since we just built them)
+    command: -c "dbt deps && dbt run --select package:dbt_artifacts && dbt seed && dbt run --exclude package:dbt_artifacts || tail -f /dev/null"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - amos_network
+
+  # ------------------------------------------------------------------
+  # 3. UI: The Dashboard (Built from remote repo)
+  # ------------------------------------------------------------------
+  dashboard:
+    container_name: amos_dashboard
+    # Pulls code directly from your separate dashboard repo
+    build: https://github.com/open-amos/dashboard.git#main
+    ports:
+      - "3000:3000"
+    environment:
+      # Connects to the postgres service on port 5432
+      DATABASE_URL: postgresql://amos:password@postgres:5432/amos_db
+      # Public URL (adjust if deploying to cloud)
+      ORIGIN: http://localhost:3000
+    depends_on:
+      - amos-core
+    restart: on-failure
+    networks:
+      - amos_network
+    command: /bin/sh -c "npm run sources && npm run dev -- --host 0.0.0.0"
+
+networks:
+  amos_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
