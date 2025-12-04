@@ -43,6 +43,7 @@ If you prefer to run this in your own environment without Docker:
 4.  Run `dbt seed` to load example data
 5.  Run `dbt run` to build the warehouse
 6.  Run `dbt test` to validate metrics
+7.  Install [AMOS Dashboard](https://github.com/open-amos/dashboard) manually
 
 ## Project Components
 
