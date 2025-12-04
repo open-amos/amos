@@ -58,40 +58,106 @@ This repository (`amos`) acts as the orchestrator. The logic is modularized acro
 ## System Architecture
 
 ```mermaid
-  graph TD
-      S1[Excel/CSV Files]
-      S2[CRM Systems]
-      S3[Fund Administrator]
-      S4[Portfolio Management]
-      S5[Accounting Systems]
-      S6[More Sources...]
-      
-      ING[<b>Ingestion & Model Mapping</b><br/><i>AMOS Source Example</i><br><i>AMOS Reconciliation</i>]
-      CORE[<b>Canonical Models & Metrics</b><br/><i>AMOS Core</i>]
-      
-      DASH[<b>BI Dashboards</b><br/><br/><i>AMOS Dashboard</i>, Power BI, Tableau, Metabase...]
-      APP[<b>Custom Applications<br/></b><br/><i>AMOS API</i><br/><i>coming soon</i>]
-      AI[<b>LLM integration</b><br/><br/><i>AMOS MCP</i><br/><i>-coming soon-</i>]
-      
-      S1 --> ING
-      S2 --> ING
-      S3 --> ING
-      S4 --> ING
-      S5 --> ING
-      S6 --> ING
-      
-      ING --> CORE
-      
-      CORE --> DASH
-      CORE --> APP
-      CORE -->|Semantic Layer| AI
-      
-      style ING fill:#E8E4F3
-      style CORE fill:#D6E9F8
-      style DASH fill:#FFF4E6
-      style APP fill:#E8F5E9
-      style AI fill:#E8F5E9
+graph TD
+    %% --- STYLES ---
+    classDef sourceNode fill:#f9f9f9,stroke:#999,stroke-width:1px,stroke-dasharray: 5 5;
+    classDef transportNode fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+    classDef infraNode fill:#eceff1,stroke:#546e7a,stroke-width:2px;
+    classDef engineNode fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef semanticNode fill:#e1f5fe,stroke:#0277bd,stroke-width:2px;
+    classDef outputNode fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    
+    %% Style for the AMOS Product Boundary
+    classDef amosContainer fill:#f5faff,stroke:#1565c0,stroke-width:2px,stroke-dasharray: 5 5;
+    %% Style for the Core Repo Boundary (The Brain)
+    classDef coreContainer fill:#ffffff,stroke:#0277bd,stroke-width:2px;
+    %% Style for the User's Warehouse Boundary
+    classDef warehouseContainer fill:#fafafa,stroke:#90a4ae,stroke-width:2px;
+
+    %% --- 1. EXTERNAL SYSTEMS ---
+    subgraph External_Source_Systems [1. External Source Systems]
+        direction LR
+        S1[📄 Excel/CSV Files]
+        S2[🤝 CRM Systems]
+        S3[🏦 Fund Admin]
+        S4[🏢 PortCo Data]
+        S5[📒 Accounting]
+    end
+
+    %% --- TRANSPORT LAYER ---
+    TRANSPORT[<b>🚚 Data Transport</b><br/><i>Fivetran, Airbyte, Uploads</i>]
+
+    %% --- THE WAREHOUSE ---
+    subgraph User_Warehouse_Infra [2. Your Data Warehouse Infrastructure <br>Postgres / Snowflake / BigQuery]
+        direction TB
+
+        %% Landing Zone
+        RAW[<b>🛢️ Raw Database / Landing Zone</b><br/><i>Data lands here as-is</i>]
+
+        %% --- THE AMOS PRODUCT ---
+        subgraph AMOS_Stack [✨ The AMOS Stack]
+            direction TB
+
+            %% Ingestion & Prep
+            subgraph Prep_Layer [3. Ingest & Repair]
+                direction TB
+                ING[<b>🔀 Clean & Map</b><br/><i>AMOS Sources</i>]
+                RECON[<b>🧩 Reconcile Entities</b><br/><i>AMOS Reconciliation</i>]
+            end
+
+            %% AMOS CORE (The "Brain" Wrapper)
+            subgraph AMOS_Core_Repo [4. AMOS Core 🧠]
+                direction TB
+                MODEL[<b>💎 Canonical Data Models</b><br/><i>Standardized Tables </i>]
+                METRICS[<b>📐 Semantic Layer</b><br/><i>Metric Definitions & Joins</i>]
+                
+                MODEL --> METRICS
+            end
+            
+            %% Consumption Layer
+            subgraph Consumption_Layer [5. Consumption]
+                direction TB
+                DASH[<b>📈 BI Dashboards</b><br/><i>AMOS Dashboard</i><br>Power BI, Tableau...]
+                APP[<b>⚡ Custom Apps</b><br/><i>AMOS API</i>]
+                AI[<b>🤖 AI Agents</b><br/><i>AMOS MCP</i>]
+            end
+        end
+    end
+
+    %% --- CONNECTIONS ---
+    S1 & S2 & S3 & S4 & S5 --> TRANSPORT
+    TRANSPORT ==> RAW
+    
+    %% Flow into AMOS
+    RAW --> ING
+    ING --> RECON
+    RECON --> MODEL
+    
+    %% Flow to Consumption
+    METRICS --> DASH
+    METRICS --> APP
+    METRICS --> AI
+
+    %% --- CLASS ASSIGNMENT ---
+    class S1,S2,S3,S4,S5 sourceNode;
+    class TRANSPORT transportNode;
+    class RAW infraNode;
+    class ING,RECON,MODEL engineNode;
+    class METRICS semanticNode;
+    class DASH,APP,AI outputNode;
+    
+    class AMOS_Stack amosContainer;
+    class User_Warehouse_Infra warehouseContainer;
+    class AMOS_Core_Repo coreContainer;
 ```
+## How It Works
+
+AMOS acts as the open-source operating system that runs on top of your existing data warehouse (Postgres, Snowflake, or BigQuery). It turns raw, disconnected files into a programmable business asset.
+
+  - 🚚 Transport (You bring the data): Use your existing tools (Fivetran, Airbyte) or simple file uploads to drop raw data into your warehouse's "Landing Zone."
+  - 🧩 Ingest & Repair: AMOS picks up that raw data. It standardizes column names and uses a reconciliation layer to resolve entity conflicts (e.g., mapping "Seq Capital" in your CRM to "Sequoia" in your Fund Admin system)
+  - 💎 The Core Brain: The data is transformed into a Canonical Data Model—a rigorous, single source of truth. At this stage, standard financial metrics (IRR, TVPI, Exposure) are calculated once, centrally.
+  - 🚀 Consume: Your BI dashboards, custom apps, and AI agents query these clean, pre-calculated metrics. They never touch the messy raw data.
 
 ## Demo
 
